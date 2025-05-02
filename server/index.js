@@ -2,11 +2,23 @@
 import express from 'express';
 import dotenv from "dotenv"
 import dbConnect from './database/db.js';
-
+import usersRouter from './routes/user.route.js';
 const app = express();
+
+const PORT = process.env.PORT || 3000;
 dotenv.config({});
 dbConnect();
-const PORT = process.env.PORT || 3000;
+
+app.use("api/v1/users", usersRouter);
+
+app.get('/Home', (_, res) => {
+    res.status(200).json({
+        success: true,
+        message: "hellow I am comming from backend"
+    })
+})
+
+
 app.get('/', (req, res) => {
     res.send('Hello World');
 })
