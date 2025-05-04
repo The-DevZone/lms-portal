@@ -1,6 +1,6 @@
 import Users from "../model/user.model.js"
-import bcrypt from "bcrypt"
-import { genrateToken } from "../utils/generateToken.js"
+import bcrypt from "bcryptjs"
+import {generateToken } from "../utils/generateToken.js"
 export const register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -18,12 +18,12 @@ export const register = async (req, res) => {
             })
         }
         const hasedPassword = await bcrypt.hash(password, 10);
-        await Users.created({
+        await Users.create({
             name,
             email,
             password: hasedPassword
         })
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "User registered successfully"
         })
@@ -37,8 +37,7 @@ export const register = async (req, res) => {
     }
 }
 
-export const login = async (res, req) => {
-    console.log(req.body)
+export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
@@ -61,14 +60,11 @@ export const login = async (res, req) => {
                 message: "Incorrect email or password"
             })
         }
-        res.status(200).json({
-            success: true,
-            message: "User login in successfully"
-        })
-        genrateToken(res, user, `Welcome back ${user.name}`);
+        generateToken(res, user, `Welcome back ${user.name}`);
+        // generateToken(res, Users, `Welcome back ${Users.name}`);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
+        // console.log(error);
+       return res.status(500).json({
             success: false,
             message: error.message
         })
