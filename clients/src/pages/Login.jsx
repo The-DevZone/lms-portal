@@ -2,7 +2,7 @@
 // rohit99539953
 // mongodb+srv://rohit99539953:7mDeyJ2TUdvnEmLt@cluster0.huhmgsa.mongodb.net/
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -14,8 +14,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRegisterUserMutation, useLoginUserMutation } from "@/feachers/api/authApi.js";
+import { toast, Toaster } from "sonner";
+import { useNavigate } from "react-router-dom";
+
+
 
 const Login = () => {
+  const navigate = useNavigate();
   const [signupInput, setSignupInput] = useState({
     name: "",
     email: "",
@@ -25,6 +31,24 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [
+    registerUser,
+    {
+      data: registerData,
+      error: registerError,
+      isLoading: registerIsLoading,
+      isSuccess: registerIsSuccess,
+    },
+  ] = useRegisterUserMutation();
+  const [
+    loginUser,
+    {
+      data: loginData,
+      error: loginError,
+      isLoading: loginIsLoading,
+      isSuccess: loginIsSuccess,
+    },
+  ] = useLoginUserMutation();
   const changeInputHandler = (e, type) => {
     const { name, value } = e.target;
     if (type === "signup") {
@@ -35,12 +59,53 @@ const Login = () => {
     }
   };
 
-  const handleRegistration = (type) => {
+  const handleRegistration = async (type) => {
     const inputData = type === "signup" ? signupInput : loginInput;
-    console.log(inputData)
-    console.log(signupInput);
-    console.log(loginInput);
-  };
+    const action = type === "signup" ? registerUser : loginUser;
+    console.log(action)
+    if (type === "signup") {
+      try {
+        const responce = await registerUser(inputData).unwrap();
+        console.log("signup success", responce);
+      } catch (error) {
+        console.log("signup error", error);
+      }
+    } else {
+      try {
+        const responce = await loginUser(inputData).unwrap();
+        console.log("login success", responce);
+      } catch (error) {
+        console.log("login error", error);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (registerData && registerIsSuccess) {
+      toast.success(registerData.massage || "Registration successful");
+    }
+    if (registerError) {
+      toast.error(
+        registerError?.data?.message ||
+        registerError?.error ||
+        "Registr failed"
+      );
+    }
+    if (loginData && loginIsSuccess) {
+      toast.success(loginData.massage || "Login successful");
+      navigate("/"); // Redirect to home page after successful login
+    }
+    if (loginError) {
+      toast.error(
+        loginError?.data?.message ||
+        loginError?.error ||
+        "Login failed"
+      );
+    }
+
+  }, [loginIsLoading, loginData, registerIsLoading, registerData, registerError, loginError])
+
+
   return (
     <div className="flex items-center w-full justify-center mt-20">
       <Tabs defaultValue="login" className="w-[400px]">
@@ -52,12 +117,12 @@ const Login = () => {
           <Card>
             <CardHeader>
               <CardTitle>Signup</CardTitle>
-              <CardDescription>
+              <CardDescription className="mb-3">
                 Create a new account and click signup when you're done.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
                 <Input
                   type="text"
@@ -65,10 +130,10 @@ const Login = () => {
                   value={signupInput.name}
                   placeholder="Eg. John Doe"
                   onChange={(e) => changeInputHandler(e, "signup")}
-                  required="true"
+                // required="true"
                 />
               </div>
-              <div className="space-y-1">
+              <div className="space-y-4">
                 <Label htmlFor="username">Email</Label>
                 <Input
                   type="email"
@@ -76,10 +141,10 @@ const Login = () => {
                   value={signupInput.email}
                   placeholder="Eg. patel@gmail.com"
                   onChange={(e) => changeInputHandler(e, "signup")}
-                  required="true"
+                // required="true"
                 />
               </div>
-              <div className="space-y-1">
+              <div className="space-y-4">
                 <Label htmlFor="username">Password</Label>
                 <Input
                   type="password"
@@ -87,7 +152,7 @@ const Login = () => {
                   value={signupInput.password}
                   placeholder="Eg. xyz"
                   onChange={(e) => changeInputHandler(e, "signup")}
-                  required="true"
+                // required="true"
                 />
               </div>
             </CardContent>
@@ -115,7 +180,7 @@ const Login = () => {
                   value={loginInput.email}
                   onChange={(e) => changeInputHandler(e, "login")}
                   placeholder="Eg.patel@gmail.com"
-                  required="true"
+                // required="true"
                 />
               </div>
               <div className="space-y-1">
@@ -126,7 +191,7 @@ const Login = () => {
                   value={loginInput.password}
                   onChange={(e) => changeInputHandler(e, "login")}
                   placeholder="Eg.xyz"
-                  required="true"
+                // required="true"
                 />
               </div>
             </CardContent>
