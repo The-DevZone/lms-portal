@@ -28,7 +28,7 @@ import {
 } from "./ui/sheet";
 import { Label } from "./ui/label.jsx";
 import { Separator } from "./ui/separator";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 
@@ -68,7 +68,7 @@ export const Navbar = () => {
                   <DropdownMenuGroup>
 
                     <DropdownMenuItem>
-                      <span>My Learning</span>
+                      <span> <Link to="My-learning">My Learning</Link> </span>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <span>Edit Profile</span>
@@ -132,7 +132,7 @@ const MobileNavbar = () => {
         </SheetHeader>
         <Separator className="mr-2  " />
         <nav className="flex flex-col ml-6 space-y-4">
-          <a href="#">My Learning</a>
+          <Link to="My-learning">My Learning</Link>
           <a href="">  Edit Profile </a>
           <p>Log out</p>
         </nav>

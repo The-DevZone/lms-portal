@@ -1,9 +1,10 @@
-// import { Skeleton } from '@/components/ui/skeleton';
-import { Key } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 import React from 'react'
+import Course from './Course';
 
 export const Courses = () => {
-  const isLoading = true;
+  const isLoading = false;
+  const courses = [1,2,3,4,5,6,7,8]; 
   return (
     <div className='bg-gray-50'>
       <div className='max-w-7xl mx-auto p-6'>
@@ -11,10 +12,10 @@ export const Courses = () => {
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
           {
             isLoading ? Array.from({ length: 8 }).map((_, index) => {
-              console.log(index);
-              // alert("Loading courses...");
-              <CourseSkeleton Key={index} />;
-            }) : "<Course />"
+               return <CourseSkeleton Key={index} />
+            }) : courses.map((_, index) => {
+               return <Course  key={index} />
+            }) 
           }
         </div>
       </div>
@@ -26,8 +27,9 @@ export const Courses = () => {
 
 
 const CourseSkeleton = () => {
+
   return (
-    <div className="bg-amber-200 shadow-md hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
+    <div className="bg-gray-200 shadow-md hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
       <Skeleton className="w-full h-36" />
       <div className="px-5 py-4 space-y-3">
         <Skeleton className="h-6 w-3/4" />
