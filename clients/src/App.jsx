@@ -9,6 +9,7 @@ import { RouterProvider } from "react-router"
 import {Courses} from "./pages/Student/Courses"
 import { ThemeProvider } from "next-themes"
 import MyLearning from "./pages/Student/MyLearning"
+import Profile from "./pages/Student/Profile"
 
 const appRouter = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const appRouter = createBrowserRouter([
       {
         path: "My-learning",
         element: <MyLearning />
+      },
+      {
+        path: "edit-profile",
+        element: <Profile/>
       }
     ],
   }

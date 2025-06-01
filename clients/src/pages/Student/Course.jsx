@@ -28,11 +28,11 @@ const Course = () => {
                             <h1 className="font-medium text-sm"></h1>
                         </div>
                         <Badge className={'bg-blue-600 text-white px-2 py-1 text-xs rounded-full'}>
-
+                            Advance
                         </Badge>
                     </div>
                     <div className="text-lg font-bold">
-                        <span>₹</span>
+                        <span>₹ 4500</span>
                     </div>
                 </CardContent>
             </Card>

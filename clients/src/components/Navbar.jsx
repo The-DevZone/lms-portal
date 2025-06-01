@@ -71,7 +71,7 @@ export const Navbar = () => {
                       <span> <Link to="My-learning">My Learning</Link> </span>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <span>Edit Profile</span>
+                      <span><Link to='edit-profile'>Edit Profile</Link></span>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <span>Log Out</span>
@@ -133,7 +133,7 @@ const MobileNavbar = () => {
         <Separator className="mr-2  " />
         <nav className="flex flex-col ml-6 space-y-4">
           <Link to="My-learning">My Learning</Link>
-          <a href="">  Edit Profile </a>
+         <Link to='edit-profile'>Edit Profile</Link>
           <p>Log out</p>
         </nav>
 
