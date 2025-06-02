@@ -16,18 +16,23 @@ import Course from "./Course";
 import { useLoadUserQuery } from "@/feachers/api/authApi";
 
 const Profile = () => {
-    const {data} = useLoadUserQuery();
-    const isLoading = false;
+    const { data, isLoading } = useLoadUserQuery();
+    // const isLoading = false;
     console.log("data", data);
-    const enrolledCourses = [1];
+    // const enrolledCourses = [1];
+
+    if (isLoading) {
+        return <h1 className="text-center my-24 text-2xl font-semibold  animate-typing overflow-hidden whitespace-nowrap border-r-4 border-black">Loading...</h1>
+    }
+    const {user} = data;
     return (
         <div className="max-w-4xl mx-auto px-4 my-24">
             <h1 className="font-bold text-2xl text-center md:text-left">PROFILE</h1>
             <div className="flex flex-col md:flex-row items-center md:items-start gap-8 my-5">
                 <div className="flex flex-col items-center">
                     <Avatar className="h-24 w-24 md:h-32 md:w-32 mb-4">
-                        <AvatarImage
-                            src="https://github.com/shadcn.png"
+                        <AvatarImage 
+                            src={ user.photoUrl ||"https://github.com/shadcn.png"}
                             alt="@shadcn"
                         />
                         <AvatarFallback>CN</AvatarFallback>
@@ -38,7 +43,7 @@ const Profile = () => {
                         <h1 className="font-semibold text-gray-900 dark:text-gray-100 ">
                             Name:
                             <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                            {data?.name || "Rohit sharma"}
+                                {user.name}
                             </span>
                         </h1>
                     </div>
@@ -46,7 +51,7 @@ const Profile = () => {
                         <h1 className="font-semibold text-gray-900 dark:text-gray-100 ">
                             Email:
                             <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                                rohit@gmail.com
+                                {user.email}
                             </span>
                         </h1>
                     </div>
@@ -54,7 +59,7 @@ const Profile = () => {
                         <h1 className="font-semibold text-gray-900 dark:text-gray-100 ">
                             Role:
                             <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                                student
+                                {user.role.toUpperCase()}
                             </span>
                         </h1>
                     </div>
@@ -107,14 +112,14 @@ const Profile = () => {
                 <h1 className="font-medium text-lg">Courses you're enrolled in</h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-5">
 
-                {
-                    enrolledCourses.length === 0 ?(
-                        <h2> You have't enrolledcourses </h2>
-                    ):(
-                        enrolledCourses.map((course , index) => <Course key={index} course={course} />
+                    {
+                        user.enrolledCourses.length === 0 ? (
+                            <h2> You have't enrolledcourses </h2>
+                        ) : (
+                                user.enrolledCourses.map((course) =><Course key={course._id} course={course} />
+                            )
                         )
-                    )
-                }
+                    }
                 </div>
             </div>
         </div>
