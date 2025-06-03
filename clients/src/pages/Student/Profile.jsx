@@ -13,26 +13,80 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import Course from "./Course";
-import { useLoadUserQuery } from "@/feachers/api/authApi";
+import { useLoadUserQuery, useUpdateUserMutation } from "@/feachers/api/authApi";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const Profile = () => {
+    const [name, setName] = useState("");
+    const [profile, setProfile] = useState("");
     const { data, isLoading } = useLoadUserQuery();
+    const [
+        updateUser,
+        {
+            data: updateUserData,
+            isLoading: updateUserIsLoading,
+            isError,
+            error,
+            isSuccess,
+        },
+    ] = useUpdateUserMutation();
     // const isLoading = false;
     console.log("data", data);
     // const enrolledCourses = [1];
+    
+    
+    const user = data?.user;
+
+     useEffect(() => {
+        if (isSuccess && updateUserData) {
+            toast.success("Profile updated successfully");
+        }
+        if (isError && error) {
+            toast.error(error.data.message || "Failed to update profile");
+        }
+    }, [updateUserData, isError, error, isSuccess]);
+
+    const onChangeHandler = (e) => {
+        const file = e.target.files[0];
+        setProfile(file);
+
+        if (!file) {
+            return;
+        }
+        console.log("file", file);
+
+    }
+
+
+    const updateUserHandler = async () => {
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("profilePhoto", profile);
+        await updateUser(formData);
+        setName("");
+        setProfile("");
+
+    }
+
+   
+
 
     if (isLoading) {
         return <h1 className="text-center my-24 text-2xl font-semibold  animate-typing overflow-hidden whitespace-nowrap border-r-4 border-black">Loading...</h1>
     }
-    const {user} = data;
+    
+    if (!data || !data.user) {
+        return <h1 className="text-center my-24 text-red-500">Failed to load user data</h1>;
+    }
     return (
         <div className="max-w-4xl mx-auto px-4 my-24">
             <h1 className="font-bold text-2xl text-center md:text-left">PROFILE</h1>
             <div className="flex flex-col md:flex-row items-center md:items-start gap-8 my-5">
                 <div className="flex flex-col items-center">
                     <Avatar className="h-24 w-24 md:h-32 md:w-32 mb-4">
-                        <AvatarImage 
-                            src={ user.photoUrl ||"https://github.com/shadcn.png"}
+                        <AvatarImage
+                            src={user.photoUrl || "https://github.com/shadcn.png"}
                             alt="@shadcn"
                         />
                         <AvatarFallback>CN</AvatarFallback>
@@ -82,6 +136,9 @@ const Profile = () => {
                                     <Label>Name</Label>
                                     <Input
                                         type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        name="name"
                                         placeholder="Name"
                                         className="col-span-3"
                                     />
@@ -89,12 +146,15 @@ const Profile = () => {
                                 <div className="grid grid-cols-4 items-center gap-4">
                                     <Label>Profile Photo</Label>
                                     <Input
+                                        onChange={onChangeHandler}
+                                        type="file"
+                                        accept="image/*"
                                         className="col-span-3"
                                     />
                                 </div>
                             </div>
                             <DialogFooter >
-                                <Button disabled={isLoading}>
+                                <Button disabled={updateUserIsLoading} onClick={updateUserHandler}>
                                     {
                                         isLoading ? (
                                             <Loader2 className="h-4 w-4 animate-spin" > Please wait </Loader2>
@@ -116,7 +176,7 @@ const Profile = () => {
                         user.enrolledCourses.length === 0 ? (
                             <h2> You have't enrolledcourses </h2>
                         ) : (
-                                user.enrolledCourses.map((course) =><Course key={course._id} course={course} />
+                            user.enrolledCourses.map((course) => <Course key={course._id} course={course} />
                             )
                         )
                     }
