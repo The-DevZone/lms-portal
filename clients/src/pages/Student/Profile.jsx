@@ -19,7 +19,7 @@ import { toast } from "sonner";
 
 const Profile = () => {
     const [name, setName] = useState("");
-    const [profile, setProfile] = useState("");
+    const [profilePhoto, setprofilePhoto] = useState("");
     const { data, isLoading } = useLoadUserQuery();
     const [
         updateUser,
@@ -31,14 +31,9 @@ const Profile = () => {
             isSuccess,
         },
     ] = useUpdateUserMutation();
-    // const isLoading = false;
-    console.log("data", data);
-    // const enrolledCourses = [1];
-    
-    
-    const user = data?.user;
 
-     useEffect(() => {
+    const user = data?.user;
+    useEffect(() => {
         if (isSuccess && updateUserData) {
             toast.success("Profile updated successfully");
         }
@@ -47,38 +42,28 @@ const Profile = () => {
         }
     }, [updateUserData, isError, error, isSuccess]);
 
-    const onChangeHandler = (e) => {
-        const file = e.target.files[0];
-        setProfile(file);
-
-        if (!file) {
-            return;
-        }
-        console.log("file", file);
-
-    }
-
-
     const updateUserHandler = async () => {
         const formData = new FormData();
         formData.append("name", name);
-        formData.append("profilePhoto", profile);
+        formData.append("profilePhoto", profilePhoto);
         await updateUser(formData);
         setName("");
-        setProfile("");
-
+        setprofilePhoto("");
     }
-
-   
-
 
     if (isLoading) {
         return <h1 className="text-center my-24 text-2xl font-semibold  animate-typing overflow-hidden whitespace-nowrap border-r-4 border-black">Loading...</h1>
     }
-    
+
     if (!data || !data.user) {
         return <h1 className="text-center my-24 text-red-500">Failed to load user data</h1>;
     }
+
+    const onChangeHandler = (e) => {
+        const file = e.target.files?.[0];
+        if (file) setprofilePhoto(file);
+    }
+
     return (
         <div className="max-w-4xl mx-auto px-4 my-24">
             <h1 className="font-bold text-2xl text-center md:text-left">PROFILE</h1>
