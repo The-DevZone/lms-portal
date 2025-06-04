@@ -89,7 +89,7 @@ export const Navbar = () => {
                     <DropdownMenuItem>
                       <span><Link to='edit-profile'>Edit Profile</Link></span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onCLick={handleLogout}>
+                    <DropdownMenuItem onClick={handleLogout}>
                       <span >Log Out</span>
                     </DropdownMenuItem>
 
