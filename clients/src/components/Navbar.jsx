@@ -28,7 +28,10 @@ import {
 } from "./ui/sheet";
 import { Label } from "./ui/label.jsx";
 import { Separator } from "./ui/separator";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLogoutUserMutation } from "@/feachers/api/authApi";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 
 
@@ -37,8 +40,21 @@ import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   const user = true; // Replace with actual user authentication logic
-  return (
+  const[userLogOut,{ data ,isSuccess}] = useLogoutUserMutation();
+  const navigate = useNavigate();
 
+  const handleLogout = async () => {
+    await userLogOut();
+  }
+  useEffect(() => {
+    if(isSuccess){
+      toast.success("Logged out successfully");
+      navigate("/login");
+    }
+  }, [isSuccess]);
+
+  console.log(data);
+  return (
     <div className="h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10">
       {/* Desktop */}
       <div className="max-w-7xl mx-auto hidden md:flex justify-between items-center gap-10 h-full">
@@ -73,8 +89,8 @@ export const Navbar = () => {
                     <DropdownMenuItem>
                       <span><Link to='edit-profile'>Edit Profile</Link></span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <span>Log Out</span>
+                    <DropdownMenuItem onCLick={handleLogout}>
+                      <span >Log Out</span>
                     </DropdownMenuItem>
 
                   </DropdownMenuGroup>
@@ -114,6 +130,7 @@ export const Navbar = () => {
 
 const MobileNavbar = () => {
   const role = "instructer"
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -134,7 +151,7 @@ const MobileNavbar = () => {
         <nav className="flex flex-col ml-6 space-y-4">
           <Link to="My-learning">My Learning</Link>
          <Link to='edit-profile'>Edit Profile</Link>
-          <p>Log out</p>
+          <p  >  Log out</p>
         </nav>
 
         {role === "instructer" &&(

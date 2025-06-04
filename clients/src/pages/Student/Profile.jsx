@@ -20,7 +20,7 @@ import { toast } from "sonner";
 const Profile = () => {
     const [name, setName] = useState("");
     const [profilePhoto, setprofilePhoto] = useState("");
-    const { data, isLoading } = useLoadUserQuery();
+    const { data, isLoading , refetch } = useLoadUserQuery();
     const [
         updateUser,
         {
@@ -33,8 +33,14 @@ const Profile = () => {
     ] = useUpdateUserMutation();
 
     const user = data?.user;
+
+    useEffect(() => {
+        refetch();
+    }, []);
+
     useEffect(() => {
         if (isSuccess && updateUserData) {
+            refetch();
             toast.success("Profile updated successfully");
         }
         if (isError && error) {

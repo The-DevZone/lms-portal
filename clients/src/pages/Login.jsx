@@ -18,8 +18,6 @@ import { useRegisterUserMutation, useLoginUserMutation } from "@/feachers/api/au
 import { toast, Toaster } from "sonner";
 import { useNavigate } from "react-router-dom";
 
-
-
 const Login = () => {
   const navigate = useNavigate();
   const [signupInput, setSignupInput] = useState({
