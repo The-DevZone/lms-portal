@@ -1,20 +1,28 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import { store } from './app/store.js'
+// import { store , persistor } from './app/store.js'
 import { Provider } from 'react-redux'
-import { Toaster } from './components/ui/sonner'
-// import {Navbar} from './components/ui/Navbar'
+
+import React, { Children } from "react";
+import ReactDOM from "react-dom/client";
 
 
-createRoot(document.getElementById('root')).render(
+import { PersistGate } from "redux-persist/integration/react";
+import { useLoadUserQuery } from './feachers/api/authApi';
+import Loader from './components/Loader';
+import { store } from './app/store';
 
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-      {/* <Navbar /> */}
-      <Toaster />
-    </Provider>
-  </StrictMode>
-)
+const Custom = ({ children }) => {
+  const { isLoading } = useLoadUserQuery();
+  return <>{ isLoading ? <Loader /> : <>{children}</> }</>;
+};
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <Provider store={store}>
+    {/* <PersistGate loading={null} persistor={persistor}> */}
+      <Custom>
+      <App/>
+      </Custom>
+    {/* </PersistGate> */}
+  </Provider>
+);

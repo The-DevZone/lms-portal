@@ -1,4 +1,4 @@
-import {  Menu, School } from "lucide-react";
+import { Menu, School } from "lucide-react";
 // import Link  from "react-router-dom";
 import { Button } from "./ui/button";
 import { User } from "lucide-react";
@@ -29,29 +29,31 @@ import {
 import { Label } from "./ui/label.jsx";
 import { Separator } from "./ui/separator";
 import { Link, useNavigate } from "react-router-dom";
-import { useLogoutUserMutation } from "@/feachers/api/authApi";
+import { useLoadUserQuery, useLogoutUserMutation } from "@/feachers/api/authApi";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-
-
-
-
-
 export const Navbar = () => {
-  const user = true; // Replace with actual user authentication logic
-  const[userLogOut,{ data ,isSuccess}] = useLogoutUserMutation();
+  // const user = true; // Replace with actual user authentication logic
+  const [userLogOut, { data, isSuccess }] = useLogoutUserMutation();
+  const {data:dataLoadUser  } = useLoadUserQuery();
+
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     await userLogOut();
   }
+
   useEffect(() => {
-    if(isSuccess){
+    if (isSuccess) {
       toast.success("Logged out successfully");
       navigate("/login");
+      // refetch();
     }
-  }, [isSuccess]);
+  }, [isSuccess ]);
+
+  const user = dataLoadUser?.user;
+  console.log(user); 
 
   console.log(data);
   return (
@@ -66,15 +68,14 @@ export const Navbar = () => {
           </h1>
         </div>
 
-
         <div className="flex items-center  gap-8 px-4 h-full">
           {
             user ? (
-
+              
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                    <AvatarImage src= {user.photoUrl ||"https://github.com/shadcn.png"} alt="@shadcn" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
@@ -114,13 +115,11 @@ export const Navbar = () => {
         </div>
       </div>
 
-
       {/* Mobile device  */}
 
       <div className="flex md:hidden items-center justify-between px-4 h-full">
         <h1 className="font-extrabold text-2xl">E-learning</h1>
-      <MobileNavbar />
-
+        <MobileNavbar />
       </div>
     </div>
   );
@@ -150,22 +149,19 @@ const MobileNavbar = () => {
         <Separator className="mr-2  " />
         <nav className="flex flex-col ml-6 space-y-4">
           <Link to="My-learning">My Learning</Link>
-         <Link to='edit-profile'>Edit Profile</Link>
+          <Link to='edit-profile'>Edit Profile</Link>
           <p  >  Log out</p>
         </nav>
 
-        {role === "instructer" &&(
+        {role === "instructer" && (
 
-        <SheetFooter>
-          
-          <SheetClose asChild>
-            <Button type="submit">Dashboard</Button>
-          </SheetClose>
-        </SheetFooter>
-        )
+          <SheetFooter>
 
-        }
-
+            <SheetClose asChild>
+              <Button type="submit">Dashboard</Button>
+            </SheetClose>
+          </SheetFooter>
+        )}
       </SheetContent>
     </Sheet>
   );

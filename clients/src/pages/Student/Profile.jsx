@@ -20,7 +20,7 @@ import { toast } from "sonner";
 const Profile = () => {
     const [name, setName] = useState("");
     const [profilePhoto, setprofilePhoto] = useState("");
-    const { data, isLoading , refetch } = useLoadUserQuery();
+    const { data, isLoading, refetch } = useLoadUserQuery();
     const [
         updateUser,
         {
@@ -162,7 +162,6 @@ const Profile = () => {
             <div>
                 <h1 className="font-medium text-lg">Courses you're enrolled in</h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-5">
-
                     {
                         user.enrolledCourses.length === 0 ? (
                             <h2> You have't enrolledcourses </h2>
