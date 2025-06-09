@@ -94,11 +94,7 @@ const Login = () => {
       navigate("/"); // Redirect to home page after successful login
     }
     if (loginError) {
-      toast.error(
-        loginError?.data?.message ||
-        loginError?.error ||
-        "Login failed"
-      );
+      toast.error(loginError?.data?.message || loginError?.error || "Login failed");
     }
 
   }, [loginIsLoading, loginData, registerIsLoading, registerData, registerError, loginError])

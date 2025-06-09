@@ -1,7 +1,7 @@
 // import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 // import { userLoggedIn, userLoggedOut } from "../authSlice";
-import { userLoggedIn } from "../authSlice";
+import { userLoggedIn, userLoggedOut } from "../authSlice";
 
 const USER_API = "http://localhost:8080/api/v1/user/"
 
@@ -25,67 +25,92 @@ export const authApi = createApi({
                 method: "POST",
                 body: inputData
             }),
-            // async onQueryStarted(_, {queryFulfilled, dispatch}) {
-            //     try {
-            //         const result = await queryFulfilled;
-            //         dispatch(userLoggedIn({user:result.data?.user}));
-            //     } catch (error) {
-            //         console.log(error);
-            //     }
-            // }
-
             async onQueryStarted(_, { queryFulfilled, dispatch }) {
-                // console.log("queryFulfilled", queryFulfilled);
-                // return false;
                 try {
                     const result = await queryFulfilled;
-                    const user = result?.data?.user; // <-- prevent crashing
-                    if (user) {
-                        dispatch(userLoggedIn({ user }));
-                    }
+                    dispatch(userLoggedIn({ user: result.data?.user }));
                 } catch (error) {
-                    console.error("Login error in RTK Query:", error);
+                    console.log(error);
                 }
-            }
-        }),
-        logoutUser: builder.mutation({
-            query: () =>({
-                url: "logout",
-                method: "GET",
-            })
-        }),
+            },
 
+            // async onQueryStarted(_, { queryFulfilled, dispatch }) {
+            //     // console.log("queryFulfilled", queryFulfilled);
+            //     // return false;
+            //     try {
+            //         const result = await queryFulfilled;
+            //         const user = result?.data?.user; // <-- prevent crashing
+            //         if (user) {
+            //             dispatch(userLoggedIn({ user }));
+            //         }
+            //     } catch (error) {
+            //         console.error("Login error in RTK Query:", error);
+            //     }
+            // }
+        }),
         // logoutUser: builder.mutation({
         //     query: () => ({
         //         url: "logout",
         //         method: "GET",
         //     }),
+
         //     async onQueryStarted(_, { queryFulfilled, dispatch }) {
         //         try {
         //             dispatch(userLoggedOut());
+        //         } catch (error) {
+        //             console.log("Logout error in RTK Query:", error);
+        //         }
+        //     }
+        // }),
+        logoutUser: builder.mutation({
+            query: () => ({
+                url: "logout",
+                method: "GET",
+            }),
+            async onQueryStarted(_, { queryFulfilled, dispatch }) {
+                try {
+                    dispatch(userLoggedOut());
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }),
+
+        loadUser: builder.query({
+            query: () => ({
+                url: "profile",
+                method: "GET"
+            }),
+
+            async onQueryStarted(_, { queryFulfilled, dispatch }) {
+                console.log("queryFulfilled", queryFulfilled);
+                try {
+                    const result = await queryFulfilled;
+                    dispatch(userLoggedIn({ user: result.data.user }))
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }),
+
+        // loadUser: builder.query({
+        //     query: () => ({
+        //         url:"profile",
+        //         method:"GET"
+        //     }),
+        //     async onQueryStarted(_, {queryFulfilled, dispatch}) {
+        //         try {
+        //             const result = await queryFulfilled;
+        //             dispatch(userLoggedIn({user:result.data.user}));
         //         } catch (error) {
         //             console.log(error);
         //         }
         //     }
         // }),
 
-        loadUser: builder.query({
-            query: () =>({
-                url: "profile",
-                method: "GET"
-            })
-        }),
-        async onQueryStarted(_, { queryFulfilled, dispatch }) {
-            console.log("queryFulfilled", queryFulfilled);
-            try {
-                const result = await queryFulfilled;
-                dispatch(userLoggedIn({user: result.data.user}))
-            }catch (error) {
-                console.log(error);
-            }
-        },
+
         updateUser: builder.mutation({
-            query: (formData) =>({
+            query: (formData) => ({
                 url: "profile/update",
                 method: "PUT",
                 body: formData,
@@ -122,8 +147,13 @@ export const {
     useLogoutUserMutation,
     useLoadUserQuery,
     useUpdateUserMutation
-    
+
     // useLogoutUserMutation,
     // useLoadUserQuery,
     // useUpdateUserMutation
 } = authApi;
+
+
+
+
+

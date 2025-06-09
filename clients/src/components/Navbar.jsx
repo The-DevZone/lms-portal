@@ -29,14 +29,16 @@ import {
 import { Label } from "./ui/label.jsx";
 import { Separator } from "./ui/separator";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoadUserQuery, useLogoutUserMutation } from "@/feachers/api/authApi";
+import { useLogoutUserMutation } from "@/feachers/api/authApi";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
 
 export const Navbar = () => {
   // const user = true; // Replace with actual user authentication logic
   const [userLogOut, { data, isSuccess }] = useLogoutUserMutation();
-  const {data:dataLoadUser  } = useLoadUserQuery();
+  // const {data:dataLoadUser  } = useLoadUserQuery();
+  const { user } = useSelector((store) => store.auth);
 
   const navigate = useNavigate();
 
@@ -48,12 +50,12 @@ export const Navbar = () => {
     if (isSuccess) {
       toast.success("Logged out successfully");
       navigate("/login");
-      // refetch();
     }
-  }, [isSuccess ]);
+    
+  }, [isSuccess]);
 
-  const user = dataLoadUser?.user;
-  console.log(user); 
+  // const user = dataLoadUser?.user;
+  console.log(user);
 
   console.log(data);
   return (
@@ -71,11 +73,11 @@ export const Navbar = () => {
         <div className="flex items-center  gap-8 px-4 h-full">
           {
             user ? (
-              
+
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar>
-                    <AvatarImage src= {user.photoUrl ||"https://github.com/shadcn.png"} alt="@shadcn" />
+                    <AvatarImage src={user.photoUrl || "https://github.com/shadcn.png"} alt="@shadcn" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
@@ -96,18 +98,28 @@ export const Navbar = () => {
 
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="bg-blue-600 text-amber-50 hover:bg-white hover:text-blue-600">
-                    {/* <LogOut /> */}
-                    <span >Dashboard</span>
 
-                  </DropdownMenuItem>
+                  {/* <LogOut /> */}
+                  {
+                    user.role === "instructer"  &&  (
+                      <>
+                      <Link to="/instructer/dashboard" className="flex items-center gap-2">
+                        <User size={16} />
+                        <DropdownMenuItem className="bg-blue-600 text-amber-50 hover:bg-white hover:text-blue-600">
+                          <span >Dashboard</span>
+                        </DropdownMenuItem>
+                      </Link>
+                      </>
+                    )
+                  }
+
                 </DropdownMenuContent>
               </DropdownMenu>
 
             ) : (
               <div className="">
-                <button variant="outline " className=" mr-3  p-1 px-6 rounded-2xl  text-white bg-black ">Login</button>
-                <button>SignUp</button>
+                <button variant="outline " className=" cursor-pointer  mr-3  p-1 px-6 rounded-2xl  text-white bg-black " onClick={() => navigate("/login")}  >Login</button>
+                <button className="cursor-pointer" onClick={() => navigate("/login")}>SignUp</button>
               </div>
             )
           }

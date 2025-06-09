@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import Course from "./Course";
-import { useLoadUserQuery, useUpdateUserMutation } from "@/feachers/api/authApi";
+import {  useLoadUserQuery, useUpdateUserMutation } from "@/feachers/api/authApi";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -41,10 +41,10 @@ const Profile = () => {
     useEffect(() => {
         if (isSuccess && updateUserData) {
             refetch();
-            toast.success("Profile updated successfully");
+            toast.success("Profile Updated Successfully");
         }
         if (isError && error) {
-            toast.error(error.data.message || "Failed to update profile");
+            toast.error(error.data.message || "Failed  update profile");
         }
     }, [updateUserData, isError, error, isSuccess]);
 
@@ -144,7 +144,7 @@ const Profile = () => {
                                     />
                                 </div>
                             </div>
-                            <DialogFooter >
+                            <DialogFooter>
                                 <Button disabled={updateUserIsLoading} onClick={updateUserHandler}>
                                     {
                                         isLoading ? (
