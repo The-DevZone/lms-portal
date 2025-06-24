@@ -2,9 +2,10 @@
 import express from 'express';
 import dotenv from "dotenv"
 import dbConnect from './database/db.js';
-import userRoute from './routes/user.route.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
+import userRoute from './routes/user.route.js';
+import courseRoute from './routes/course.route.js';
 const app = express();
 
 dotenv.config({});
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(cookieParser());
 //api
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/course" , courseRoute)
 
 app.listen(PORT , () => { //  Start the server and listen on the specified port
     console.log(`Server is running on port ${PORT}`);

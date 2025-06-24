@@ -44,7 +44,7 @@ const appRouter = createBrowserRouter([
   }
 ])
 function App() {
-  const {data, isLoading} = useLoadUserQuery();
+  const {isLoading} = useLoadUserQuery();
   if (isLoading) {
     return <Loader />;
   }
