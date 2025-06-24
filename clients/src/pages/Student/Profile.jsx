@@ -13,13 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import Course from "./Course";
-import {  useLoadUserQuery, useUpdateUserMutation } from "@/feachers/api/authApi";
+import { useLoadUserQuery, useUpdateUserMutation } from "@/feachers/api/authApi";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const Profile = () => {
     const [name, setName] = useState("");
     const [profilePhoto, setprofilePhoto] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const { data, isLoading, refetch } = useLoadUserQuery();
     const [
         updateUser,
@@ -48,13 +49,27 @@ const Profile = () => {
         }
     }, [updateUserData, isError, error, isSuccess]);
 
+
     const updateUserHandler = async () => {
+
+        if (name.trim() === "") {
+            toast.error("Name field cannot be empty!");
+            return;
+        }
+        if (!profilePhoto) {
+            toast.error("Please select a profile photo!");
+            return;
+        }
+       
+
         const formData = new FormData();
         formData.append("name", name);
         formData.append("profilePhoto", profilePhoto);
         await updateUser(formData);
         setName("");
         setprofilePhoto("");
+
+        setIsModalOpen(false);
     }
 
     if (isLoading) {
@@ -78,7 +93,7 @@ const Profile = () => {
                     <Avatar className="h-24 w-24 md:h-32 md:w-32 mb-4">
                         <AvatarImage
                             src={user.photoUrl || "https://github.com/shadcn.png"}
-                            alt="@shadcn"
+                            alt="@Profile Picture"
                         />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
@@ -108,7 +123,7 @@ const Profile = () => {
                             </span>
                         </h1>
                     </div>
-                    <Dialog>
+                    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                         <DialogTrigger asChild>
                             <Button size="sm" className="mt-2">
                                 Edit Profile
@@ -147,7 +162,7 @@ const Profile = () => {
                             <DialogFooter>
                                 <Button disabled={updateUserIsLoading} onClick={updateUserHandler}>
                                     {
-                                        isLoading ? (
+                                        updateUserIsLoading ? (
                                             <Loader2 className="h-4 w-4 animate-spin" > Please wait </Loader2>
                                         ) : (
                                             "Save Changes"

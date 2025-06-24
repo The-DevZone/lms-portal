@@ -77,7 +77,7 @@ export const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar>
-                    <AvatarImage src={user.photoUrl || "https://github.com/shadcn.png"} alt="@shadcn" />
+                    <AvatarImage src={user?.photoUrl || "https://github.com/shadcn.png"} alt="@shadcn" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
@@ -118,7 +118,7 @@ export const Navbar = () => {
 
             ) : (
               <div className="">
-                <button variant="outline " className=" cursor-pointer  mr-3  p-1 px-6 rounded-2xl  text-white bg-black " onClick={() => navigate("/login")}  >Login</button>
+                <button variant="outline " className=" cursor-pointer  mr-3  p-1 px-6 rounded-2xl  text-white bg-black " onClick={() => navigate("/login")}>Login</button>
                 <button className="cursor-pointer" onClick={() => navigate("/login")}>SignUp</button>
               </div>
             )

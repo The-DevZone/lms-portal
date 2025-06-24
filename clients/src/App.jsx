@@ -5,11 +5,14 @@ import HeroSection from "./pages/Student/HeroSection"
 import MainLayOut from "./layout/MainLayOut"
 import { createBrowserRouter } from "react-router-dom"
 // import { Provider } from "react-redux"
-import { RouterProvider } from "react-router"
+import { Navigate, RouterProvider } from "react-router"
 import {Courses} from "./pages/Student/Courses"
 import { ThemeProvider } from "next-themes"
 import MyLearning from "./pages/Student/MyLearning"
 import Profile from "./pages/Student/Profile"
+import { useLoadUserQuery } from "./feachers/api/authApi"
+import Loader from "./components/Loader"
+import { Toaster } from "sonner"
 
 const appRouter = createBrowserRouter([
   {
@@ -41,10 +44,20 @@ const appRouter = createBrowserRouter([
   }
 ])
 function App() {
+  const {data, isLoading} = useLoadUserQuery();
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  // if(!data?.user){
+  //   return <Navigate to="/Login" />
+  // }
+
   return (
     <>
       <main>
         <RouterProvider router={appRouter} />
+        <Toaster />
       </main>
     </>
   )
