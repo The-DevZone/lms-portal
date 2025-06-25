@@ -1,9 +1,10 @@
-import Course from "../models/course.model.js";
+import {Course} from "../model/course.model.js";
 
-const createCourse = async (req, res) => {
+ export const createCourse = async (req, res) => {
     try {
 
         const { courseTitle, category } = req.body;
+        console.log("req.body", req.body); 
         if (!courseTitle || !category) {
             res.status(400).json({
                 success: false,
@@ -15,6 +16,11 @@ const createCourse = async (req, res) => {
             courseTitle,
             category,
             creator: req.id
+        })
+        res.status(201).json({
+            success: true,
+            message:"course created successfully",
+            course
         })
 
     } catch (error) {

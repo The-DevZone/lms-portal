@@ -89,6 +89,7 @@ export const authApi = createApi({
                     dispatch(userLoggedIn({ user: result.data.user }))
                 } catch (error) {
                     console.log(error);
+                    
                 }
             }
         }),

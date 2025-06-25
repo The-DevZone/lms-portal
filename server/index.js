@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(cookieParser());
 //api
 app.use("/api/v1/user", userRoute);
-app.use("/api/v1/course" , courseRoute)
+app.use("/api/v1/course" , courseRoute);
 
 app.listen(PORT , () => { //  Start the server and listen on the specified port
     console.log(`Server is running on port ${PORT}`);
