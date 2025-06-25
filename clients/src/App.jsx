@@ -13,6 +13,7 @@ import Profile from "./pages/Student/Profile"
 import { useLoadUserQuery } from "./feachers/api/authApi"
 import Loader from "./components/Loader"
 import { Toaster } from "sonner"
+import AddCourse from "./pages/Admin/course/AddCourse"
 
 const appRouter = createBrowserRouter([
   {
@@ -39,6 +40,12 @@ const appRouter = createBrowserRouter([
       {
         path: "edit-profile",
         element: <Profile/>
+      },
+      {
+        path: "add-course",
+        element: <AddCourse />
+      },
+      {
       }
     ],
   }
