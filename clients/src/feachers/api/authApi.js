@@ -1,6 +1,4 @@
-// import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-// import { userLoggedIn, userLoggedOut } from "../authSlice";
 import { userLoggedIn, userLoggedOut } from "../authSlice";
 
 const USER_API = "http://localhost:8080/api/v1/user/"
@@ -34,34 +32,8 @@ export const authApi = createApi({
                 }
             },
 
-            // async onQueryStarted(_, { queryFulfilled, dispatch }) {
-            //     // console.log("queryFulfilled", queryFulfilled);
-            //     // return false;
-            //     try {
-            //         const result = await queryFulfilled;
-            //         const user = result?.data?.user; // <-- prevent crashing
-            //         if (user) {
-            //             dispatch(userLoggedIn({ user }));
-            //         }
-            //     } catch (error) {
-            //         console.error("Login error in RTK Query:", error);
-            //     }
-            // }
         }),
-        // logoutUser: builder.mutation({
-        //     query: () => ({
-        //         url: "logout",
-        //         method: "GET",
-        //     }),
 
-        //     async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        //         try {
-        //             dispatch(userLoggedOut());
-        //         } catch (error) {
-        //             console.log("Logout error in RTK Query:", error);
-        //         }
-        //     }
-        // }),
         logoutUser: builder.mutation({
             query: () => ({
                 url: "logout",
@@ -89,27 +61,10 @@ export const authApi = createApi({
                     dispatch(userLoggedIn({ user: result.data.user }))
                 } catch (error) {
                     console.log(error);
-                    
+
                 }
             }
         }),
-
-        // loadUser: builder.query({
-        //     query: () => ({
-        //         url:"profile",
-        //         method:"GET"
-        //     }),
-        //     async onQueryStarted(_, {queryFulfilled, dispatch}) {
-        //         try {
-        //             const result = await queryFulfilled;
-        //             dispatch(userLoggedIn({user:result.data.user}));
-        //         } catch (error) {
-        //             console.log(error);
-        //         }
-        //     }
-        // }),
-
-
         updateUser: builder.mutation({
             query: (formData) => ({
                 url: "profile/update",
@@ -118,28 +73,7 @@ export const authApi = createApi({
                 credentials: "include"
             })
         })
-        // loadUser: builder.query({
-        //     query: () => ({
-        //         url: "profile",
-        //         method: "GET"
-        //     }),
-        //     async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        //         try {
-        //             const result = await queryFulfilled;
-        //             dispatch(userLoggedIn({ user: result.data.user }));
-        //         } catch (error) {
-        //             console.log(error);
-        //         }
-        //     }
-        // }),
-        // updateUser: builder.mutation({
-        //     query: (formData) => ({
-        //         url: "profile/update",
-        //         method: "PUT",
-        //         body: formData,
-        //         credentials: "include"
-        //     })
-        // })
+
     })
 });
 export const {
@@ -148,10 +82,6 @@ export const {
     useLogoutUserMutation,
     useLoadUserQuery,
     useUpdateUserMutation
-
-    // useLogoutUserMutation,
-    // useLoadUserQuery,
-    // useUpdateUserMutation
 } = authApi;
 
 

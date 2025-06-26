@@ -32,7 +32,7 @@ const AddCourse = () => {
           <Label>Title</Label>
           <Input
             type="text"
-            value="{courseTitle}"
+            value="click to edit"
            
             placeholder="Your Course Name"
           />
