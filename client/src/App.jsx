@@ -14,6 +14,8 @@ import { useLoadUserQuery } from "./feachers/api/authApi"
 import Loader from "./components/Loader"
 import { Toaster } from "sonner"
 import AddCourse from "./pages/Admin/course/AddCourse"
+import Sidebar from "./pages/admin/Sidebar"
+import Dashboard from "./pages/admin/Dashboard"
 
 const appRouter = createBrowserRouter([
   {
@@ -42,11 +44,22 @@ const appRouter = createBrowserRouter([
         element: <Profile/>
       },
       {
-        path: "add-course",
-        element: <AddCourse />
+        path: "admin",
+        element: (
+          <Sidebar />
+        ),
+        children: [
+          {
+            path: "dashboard",
+            element: <Dashboard />
+          },
+          {
+            path:"add-course",
+            element: <AddCourse />
+          },
+        ],
       },
-      {
-      }
+     
     ],
   }
 ])
